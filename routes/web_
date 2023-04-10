@@ -1,0 +1,84 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\SettingsController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('auth.login');
+});
+
+Route::middleware(['auth'])->group(function () {
+    //Dashboard
+    Route::get('/dashboard', [Controller::class, 'dashboard'])->name('dashboard');
+
+    //Users
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/users-create', [UserController::class, 'create'])->name('create-users');
+    Route::post('/users-store', [UserController::class, 'store'])->name('store-users');
+    Route::get('/users-view/{id}', [UserController::class, 'show'])->name('view-user');
+    Route::get('/users-edit/{id}', [UserController::class, 'edit'])->name('edit-user');
+    Route::put('/users-update/{id}', [UserController::class, 'update'])->name('update-user');
+    Route::post('/users-delete', [UserController::class, 'destroy'])->name('delete-user');
+
+    //Employee
+    Route::get('/employees', [EmployeeController::class, 'index'])->name('employee');
+    Route::get('/employees-create', [EmployeeController::class, 'create'])->name('create-employee');
+    Route::post('/employees-store', [EmployeeController::class, 'store'])->name('store-employee');
+    Route::get('/employees-view/{id}', [EmployeeController::class, 'show'])->name('view-employee');
+    Route::get('/employees-edit/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
+    Route::put('/employees-update/{id}', [EmployeeController::class, 'update'])->name('update-employee');
+    Route::delete('/employees-delete/{id}', [EmployeeController::class, 'destroy'])->name('delete-employee');
+
+    // Attendance
+    Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendance');
+    Route::get('/attendances-create', [AttendanceController::class, 'create'])->name('create-attendances');
+    Route::post('/attendances-store', [AttendanceController::class, 'store'])->name('store-attendances');
+    Route::get('/attendances-view/{id}', [AttendanceController::class, 'show'])->name('view-attendances');
+    Route::get('/attendances-edit/{id}', [AttendanceController::class, 'edit'])->name('edit-attendances');
+    Route::put('/attendances-update/{id}', [AttendanceController::class, 'update'])->name('update-attendances');
+    // Route::get('/import-attendance', [AttendanceController::class, 'import_attendance'])->name('import_attendance');
+    Route::post('/upload-attendance', [AttendanceController::class, 'upload_attendance'])->name('upload_attendance');
+    Route::get('/check-cutoff', [AttendanceController::class, 'check_cutoff'])->name('check_cutoff');
+
+    //Payroll
+    Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll');
+    Route::post('/verify-authorization_code', [PayrollController::class, 'verify_authorization_code'])->name('verify-authorization-code');
+    // Route::get('/payrolls-create', [PayrollController::class, 'create'])->name('create-payrolls');
+    // Route::post('/payrolls-store', [PayrollController::class, 'store'])->name('store-payrolls');
+    // Route::get('/payrolls-view/{id}', [PayrollController::class, 'show'])->name('view-payrolls');
+    // Route::get('/payrolls-edit/{id}', [PayrollController::class, 'edit'])->name('edit-payrolls');
+    // Route::put('/payrolls-update/{id}', [PayrollController::class, 'update'])->name('update-payrolls');
+
+    //Loans
+    Route::get('/loans', [LoanController::class, 'index'])->name('loan');
+    Route::get('/loans-create', [LoanController::class, 'create'])->name('create-loans');
+    Route::post('/loans-store', [LoanController::class, 'store'])->name('store-loans');
+    Route::get('/loans-view/{id}', [LoanController::class, 'show'])->name('view-loans');
+    Route::get('/loans-edit/{id}', [LoanController::class, 'edit'])->name('edit-loans');
+    Route::put('/loans-update/{id}', [LoanController::class, 'update'])->name('update-loans');
+
+    //Settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::post('/settings-set-authcode', [SettingsController::class, 'set_authorization_code'])->name('set-authcode');
+    Route::post('/set-active-tab', [SettingsController::class, 'set_active_tab'])->name('set-active-tab');
+    Route::post('/employee-dr-store', [SettingsController::class, 'store_employee_dr'])->name('employee-dr-store');
+});
+
+require __DIR__.'/auth.php';

@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Models\Settings;
+use App\Models\Employees;
+use App\Models\EmployeeDr;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
+
+use Illuminate\Http\Request;
+
+class SettingsController extends Controller
+{
+    public function index(){
+        $active_tab = Settings::where('id', 1)->first();
+        $employees =  Employees::with('EmployeeDetails')->orderBy('last_name', 'ASC')->get();
+        $total_amount = 0;
+
+        $employees_dr = EmployeeDr::with('Employee', 'EmployeeDetails')->groupBy('employee_id')->get();
+        return view('modules.settings.settings', [
+            'active_tab' => $active_tab->active_tab,
+            'employees' => $employees,
+            'employees_dr' => $employees_dr,
+            'total_amount' => $total_amount,
+        ]);
+    }
+
+    public function set_active_tab(Request $request){
+        $passcode_obj = Settings::find(1);
+        $passcode_obj->active_tab = $request->tab_value;
+        $passcode_obj->save();
+
+        //Return data
+        $active_tab = Settings::where('id', 1)->first();
+        return $active_tab->active_tab;
+    }
+
+    public function set_authorization_code(Request $request){
+
+        $passcode_encrypt = Crypt::encryptString($request->pass_code); // encryption
+
+        $passcode_obj = Settings::find(1);
+        $passcode_obj->authorization_code = $passcode_encrypt;
+        $passcode_obj->save();
+
+        // $decrypted = Crypt::decryptString($passcode_encrypt); // decryption
+        return $passcode_encrypt;
+    }
+
+    public function store_employee_dr(Request $request){
+        $employee_dr = EmployeeDr::create([
+            'employee_id' => $request->employee_id,
+            'amount' => $request->amount,
+            'note' => $request->note,
+        ]);
+        return 'true';
+    }
+
+}

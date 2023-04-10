@@ -1,0 +1,342 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('view_attendance', () => ({
+            // 'error_message': '',
+            // 'show_data': false,
+            // 'attendance_data': [],
+            // 'attendance_array_temp': [],
+            // 'show_warning': false,
+            // 'show_addrecord': false,
+            // 'show_save': false,
+
+            // 'dragging': false,
+            // 'csv_data': [],
+            // 'csvFile': [],
+            // 'upload_successful': false,
+            // 'error': false,
+            // 'is_blank_cutoff': false,
+            // 'attendance_count': 0,
+
+            // 'allowed_upload': false,
+            // 'no_click_allowed': false,
+            // 'is_check_cutoff': false,
+            // 'is_passed': false,
+            // 'is_not_passed': false,
+
+            // 'error_during_save': false,
+            // 'redirect': false,
+
+            // 'temp_records': [],
+            // 'add_cutoff_date': '',
+            // 'add_error': false,
+
+            // count_att(){
+            //     console.log(this.attendance_array_temp);
+            // },
+            // update_current_record(row, column, details){
+            //     this.attendance_array_temp[row][column] = details;
+            // },
+            // get_current_cutoff(cutoff_val){
+            //     this.add_cutoff_date = cutoff_val;
+            // },
+            // select_file($event){
+            //     this.csvFile = [];
+            //     let files = [...$event.target.files];
+            //     this.uploadFiles(files);
+            // },
+            // onDropFile($event){
+            //     this.csvFile = [];
+            //     this.dragging = false;
+            //     let files = [...$event.dataTransfer.items]
+            //         .filter(item => item.kind === 'file')
+            //         .map(item => item.getAsFile());
+
+            //     this.uploadFiles(files)
+            // },
+            // uploadFiles(files){
+            //     this.no_click_allowed = true;
+
+            //     //allowed file type | CSV
+            //     const allowed_type = 'csv';
+            //     let upload_type = '';
+            //     let next_step = false;
+            //     for (const key in files) {
+            //         if (Object.hasOwnProperty.call(files, key)) {
+            //             const element = files[key];
+            //             upload_type = element.name.split(".").pop();
+
+            //             if (allowed_type == upload_type.toLowerCase()) {
+            //                 // for file size
+            //                 const bytesToMegaBytes = bytes => (bytes / (1024 ** 2)).toFixed(2);
+            //                 this.csvFile.unshift({
+            //                     file: element,
+            //                     progress: 0,
+            //                     file_size: bytesToMegaBytes(element.size),
+            //                 });
+            //                 next_step = true;
+            //                 break;
+            //             }
+            //             else{
+            //                 break;
+            //             }
+
+            //         }
+            //     }
+            //     if(next_step) {
+            //         for (const key in files) {
+            //             if (Object.hasOwnProperty.call(this.csvFile, key)) {
+            //                 this.csv_data = [];
+            //                 let form = new FormData;
+            //                 form.append('attendance_file', this.csvFile[key].file);
+            //                 form.append('file_type', upload_type);
+            //                 axios.post('{{ route('upload_attendance') }}', form, {
+            //                     onUploadProgress: (event) => {
+            //                         this.csvFile[key].progress = Math.round(event.loaded * 100 / event.total);
+            //                         if (this.csvFile[key].progress == 100){
+            //                             this.upload_successful = true;
+            //                         }
+            //                     }
+            //                 })
+            //                 .then((response) => {
+            //                     var _resp = response.data[0];
+            //                     this.show_data = true;
+            //                     this.attendance_count = response.data[0].length;
+            //                     for (let index = 0; index < this.attendance_count; index++) {
+            //                         if (index != 0){
+            //                             this.attendance_array_temp.push(_resp[index]);
+            //                             this.attendance_data.push(_resp[index]);
+            //                         }
+            //                     }
+            //                     console.log(this.attendance_data);
+            //                     this.no_click_allowed = false;
+            //                 },
+            //                 (error) => {
+            //                     console.log(error);
+            //                 });
+            //             }
+            //         }
+            //     }
+            //     else {
+            //         this.upload_successful = false;
+            //         this.error_message = "Invalid file type";
+            //         this.error = true;
+            //         setTimeout(() => {
+            //             this.error_message = "";
+            //             this.error = false;
+            //         }, 2000);
+
+            //     }
+            // },
+            // generate_id(index){
+            //     var chrt1 = document.getElementById(index);
+            //     console.log(chrt1.innerText);
+            // },
+            // save_attendance(){
+            //     // Extract data for saving to database
+            //     const arr = this.attendance_array_temp;
+
+            //     // Array that holds formatted data
+            //     var attendance = [];
+            //     for (let index = 0; index < arr.length; index++) {
+            //         let row = {
+            //             "employee_no":      arr[index][0],
+            //             "account_no":       arr[index][1],
+            //             "no":               arr[index][2],
+            //             "employee_name":    arr[index][3],
+            //             "date":             arr[index][4],
+            //             "time_in_am":       arr[index][5],
+            //             "time_out_am":      arr[index][6],
+            //             "time_in_pm":       arr[index][7],
+            //             "time_out_pm":      arr[index][8]
+            //         }
+            //         attendance.push(row);
+            //     }
+
+            //     // Post data
+            //     axios.post('{{ route('store-attendances') }}', {
+            //             cutoff_date: this.$refs.cutoff_date.value,
+            //             attendance_data: attendance
+            //         }, {
+            //             headers: {
+            //                 'Content-Type': 'application/json'
+            //             }
+            //         })
+            //     .then((response) => {
+            //         if(response.data == 1){
+            //             this.error_during_save = response.data;
+            //             this.error_message = 'Something went wrong please double check if all fields are not empty!';
+            //         }
+            //         else if(response.data == 0) {
+            //             this.redirect = true;
+            //             this.error_during_save = true;
+            //             this.error_message = 'Attendance Uploaded Successfully';
+            //         }
+            //         else {
+            //             this.error_during_save = true;
+            //             this.error_message = response.data;
+            //         }
+            //     });
+            //     this.show_save = false;
+            // },
+            // add_new_records(employee_no, account_no, no, employee_name, time_in_am, time_out_am, time_in_pm, time_out_pm){
+            //     if (this.$refs.employee_no.value && this.$refs.account_no.value && this.$refs.employee_name.value && this.$refs.time_in_am.value && this.$refs.time_out_am.value && this.$refs.time_in_pm.value && this.$refs.time_out_pm.value){
+            //         let row = [employee_no, account_no, no, employee_name, '{{ $current_date }}', time_in_am, time_out_am, time_in_pm, time_out_pm];
+            //         this.temp_records.push(row);
+
+            //         this.$refs.employee_no.value = '';
+            //         this.$refs.employee_name.value = '';
+            //         this.$refs.department.value = '';
+            //         this.$refs.time_in_am.value = '';
+            //         this.$refs.time_out_am.value = '';
+            //         this.$refs.time_in_pm.value = '';
+            //         this.$refs.time_out_pm.value = '';
+            //         this.$refs.account_no.value = '';
+            //         this.$refs.no.value = '';
+
+            //     }
+            //     else {
+            //         this.add_error = true;
+            //         setTimeout(() => {
+            //             this.add_error = false;
+            //         }, 2000);
+            //     }
+            // },
+            // merge_records(){
+            //     const _length = this.temp_records.length;
+            //     for (let index = 0; index < _length; index++) {
+            //         this.attendance_array_temp.push(this.temp_records[index]);
+            //         this.attendance_data.push(this.temp_records[index]);
+            //     }
+            //     // console.log(this.temp_records);
+            //     // console.log(this.attendance_array_temp);
+
+            //     // this.attendance_data = [];
+            //     // this.attendance_data = this.attendance_array_temp;
+            //     this.show_addrecord = false;
+            //     this.temp_records = [];
+            // },
+            // remove_record(delete_index){
+            //     var temp_array = this.temp_records;
+            //     const record_length = this.temp_records.length;
+            //     this.no_click_allowed = true;
+            //     this.temp_records = [];
+
+            //     for (let index = 0; index < record_length; index++) {
+            //         if (index != delete_index){
+            //             this.temp_records.push(temp_array[index]);
+            //         }
+            //     }
+            //     setTimeout(() => {
+            //         this.no_click_allowed = false;
+            //     }, 500);
+            // },
+            // close_add_record(){
+            //     this.show_addrecord = false;
+            //     this.temp_records = [];
+            //     this.$refs.employee_no.value = '';
+            //     this.$refs.employee_name.value = '';
+            //     this.$refs.department.value = '';
+            //     this.$refs.time_in_am.value = '';
+            //     this.$refs.time_out_am.value = '';
+            //     this.$refs.time_in_pm.value = '';
+            //     this.$refs.time_out_pm.value = '';
+            //     this.$refs.account_no.value = '';
+            //     this.$refs.no.value = '';
+            // },
+            // check_cutoff(){
+            //     if (this.$refs.cutoff_date.value == ''){
+            //         this.error_message = 'Cut off date cannot be empty!';
+            //         this.is_blank_cutoff = true;
+            //         setTimeout(() => {
+            //             this.error_message = "";
+            //             this.is_blank_cutoff = false;
+            //         }, 2000);
+            //     }
+            //     else {
+
+            //         this.is_not_passed = false;
+            //         this.is_passed = false;
+            //         this.no_click_allowed = true;
+            //         this.is_check_cutoff = true;
+            //         this.allowed_upload = false;
+
+            //         let cutoff_date = this.$refs.cutoff_date.value;
+
+            //         // let form = new FormData();
+            //         // form.append('cutoff_date', cutoff_date);
+            //         let is_passed = true;
+            //         axios.get('/check-cutoff')
+            //         .then((response) => {
+            //             for(let i=0; i< response.data.length; i++) {
+            //                 if (new Date(cutoff_date) <= new Date(response.data[i].cutoff_date)){
+            //                     is_passed = false;
+            //                     break;
+            //                 }
+            //             }
+
+            //             // 'allowed_upload': false,
+            //             // 'no_click_allowed': false,
+            //             // 'is_check_cutoff': false,
+            //             // 'is_passed': false,
+            //             // '': false,
+
+            //             if (is_passed){
+            //                 this.allowed_upload = true;
+            //                 this.no_click_allowed = false;
+            //                 this.is_check_cutoff = false;
+            //                 this.is_not_passed = false;
+            //                 this.is_passed = true;
+
+            //             }
+            //             else {
+            //                 this.allowed_upload = false;
+            //                 this.is_not_passed = true;
+            //                 this.is_check_cutoff = false;
+            //                 this.no_click_allowed = false;
+            //             }
+
+            //         });
+            //     }
+            //     // this.allowed_upload = true;
+            // },
+            // date_formatter(date_input){
+            //     // const MONTH_SHORT_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            //     // var time_series = [];
+            //     // for(var i=0; i < date_input.length; i++) {
+            //     //     var date_object = new Date(date_input[i]);
+            //     //     var month = date_object.getMonth();
+            //     //     var day = date_object.getDate();
+            //     //     var year = date_object.getFullYear();
+
+            //     //     if (day.toString().length < 2)
+            //     //         day = '0' + day;
+
+            //     //     //time_series[i] = (MONTH_SHORT_NAMES[month]+'-'+day+'-'+ year);
+            //     //     time_series[i] = (MONTH_SHORT_NAMES[month]+' '+day+' '+ year);
+            //     // }
+            //     return new Date(date_input);
+            // },
+
+            // 'employees': @json($employees),
+            // 'filtered_employees': [],
+            // 'click_emp': false,
+            // 'search_emp': false,
+            // 'message': '',
+            // show_suggestion(){
+            //     this.filtered_employees = [];
+            //     var emp = @json($employees);
+            //     var index = 0;
+            //     for (const key in emp) {
+            //         if (Object.hasOwnProperty.call(emp, key)) {
+            //             const emp_record = ((emp[key].last_name) +' '+ (emp[key].first_name) +' '+ (emp[key].middle_name)).toLowerCase();
+            //             const result = emp_record.toLowerCase().includes((this.$refs.employee_name.value).toLowerCase());
+            //             if(result){
+            //                 this.filtered_employees[index] = emp[key];
+            //                 index++;
+            //             }
+            //         }
+            //     }
+            // },
+        }));
+    });
+</script>
